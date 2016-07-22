@@ -37,7 +37,7 @@ exports.createHaiku = function(structure){
 	var haiku = "";
 	// ADD THE CORRECT NUMBER OF SYLLABLES TO EACH LINE
 	for (var i = 0; i < structure.length; ++i) {
-		var thisLine = structure[i];
+		var thisLine = structure[i][0]; // QUICK FIX FOR NESTED ARRAYS; ASSESSMENT REVIEW WAS REQUIRED HOMEWORK?!?
 
 		while (thisLine > 0) {
 			var whichArr = 0;
