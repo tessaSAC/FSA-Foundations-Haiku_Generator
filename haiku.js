@@ -1,44 +1,28 @@
 var fs = require("fs"),
+	parser = require("./parser"),
 	formatter = require("./formatter"),
 	cmudictFile = readCmudictFile('./cmudict.txt'),
 	syllabArr = ["\n"];
 
 
+// READ DICTIONARY
 function readCmudictFile(file){
   return fs.readFileSync(file).toString();
 }
 
-function formatData(data) {
-	lines = data.toString().split("\n");
-	var lineSplit;
-	lines.forEach(function(line){
-   		lineSplit = line.split("  ");
 
-
-   		// RECORD SYLLABLE LENGTH:
-   		if ((/\d/).test(lineSplit[1])) {
-   			lineSplit[1] = lineSplit[1].match(/\d/g).length;
-   		}
-    	// console.log("The word " + lineSplit[0] + " has this phoneme    layout: " + lineSplit[1]);
-
-
- 		// SPLIT INTO SORTED ARRAYS
- 		var thisWord = lineSplit[0].replace(/[^A-Z]/g, "");
- 		if (!syllabArr[lineSplit[1]])
- 			syllabArr[lineSplit[1]] = [];
- 		syllabArr[lineSplit[1]].push(thisWord);
-	});
-}
-
-formatData(cmudictFile);
+// PARSE DICTIONARY
+syllabArr = (parser.formatData(cmudictFile, syllabArr));
 
 
 
+// PROFIT
 exports.createHaiku = function(structure){
-
 	var haiku = "",
 		whichArr;
+
 	// ADD THE CORRECT NUMBER OF SYLLABLES TO EACH LINE
+
 	for (var i = 0; i < structure.length; ++i) {
 		if (structure[0].length === 1) {              		    // FOR HAIKUS WITH NO SPECIFIED WORD COUNT
 			var thisLine = structure[i][0];
@@ -69,9 +53,12 @@ exports.createHaiku = function(structure){
 			return haiku += "\n"; // ADD NEW LINE IF END OF LINE
     }
 
+
     // FORMAT HAIKU
     haiku = formatter.capitalize(haiku);
 
+
+    // OUTPUT IT
 	console.log(haiku);
 };
 
