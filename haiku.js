@@ -34,25 +34,40 @@ formatData(cmudictFile);
 
 
 exports.createHaiku = function(structure){
-	var haiku = "";
+
+	var haiku = "",
+		whichArr;
 	// ADD THE CORRECT NUMBER OF SYLLABLES TO EACH LINE
 	for (var i = 0; i < structure.length; ++i) {
-		var thisLine = structure[i][0]; // QUICK FIX FOR NESTED ARRAYS; ASSESSMENT REVIEW WAS REQUIRED HOMEWORK?!?
+		if (structure[0].length === 1) {              		    // FOR HAIKUS WITH NO SPECIFIED WORD COUNT
+			var thisLine = structure[i][0];
+			while (thisLine > 0) {
+				whichArr = Math.ceil(Math.random() * Math.min((syllabArr.length - 1), thisLine));
+				haiku += syllabArr[whichArr][Math.floor(Math.random() * syllabArr[whichArr].length)]; // INSTEAD OF X[A[B]] IT SHOULD BE X[A][B]
+				thisLine -= whichArr;
 
-		while (thisLine > 0) {
-			var whichArr = 0;
-			whichArr = Math.ceil(Math.random() * Math.min((syllabArr.length - 1), thisLine));
-			haiku += syllabArr[whichArr][Math.floor(Math.random() * syllabArr[whichArr].length)]; // INSTEAD OF X[A[B]] IT SHOULD BE X[A][B]
-			thisLine -= whichArr;
+				spacing(thisLine, 0);
+	    	}
 
-			if (thisLine > 0)
-				haiku += " "; // ADD SPACE IF NOT END OF LINE
-			else if (i === structure.length - 1)
-				haiku += ""; // ADD NOTHING IF END OF HAIKU
-			else
-				haiku += "\n"; // ADD NEW LINE IF END OF LINE
-    	}
+	    } else {           		                                // FOR HAIKUS WITH A SPECIFIED WORD COUNT
+	    	for (var k = structure[i].length; k > 0; --k) {
+	    		whichArr = structure[i][structure[i].length - k];
+	    		haiku += syllabArr[whichArr][Math.floor(Math.random() * syllabArr[whichArr].length)];
+
+	    		spacing(k, 1);
+	    	}
+	    }
     }
+
+    function spacing(marker, midsentence) {
+    	if (marker > midsentence)
+			return haiku += " "; // ADD SPACE IF NOT END OF LINE
+		else if (i === structure.length - 1)
+			return haiku += ""; // ADD NOTHING IF END OF HAIKU
+		else
+			return haiku += "\n"; // ADD NEW LINE IF END OF LINE
+    }
+
 	console.log(haiku);
 };
 
