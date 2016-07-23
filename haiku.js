@@ -1,4 +1,5 @@
 var fs = require("fs"),
+	formatter = require("./formatter"),
 	cmudictFile = readCmudictFile('./cmudict.txt'),
 	syllabArr = ["\n"];
 
@@ -69,10 +70,7 @@ exports.createHaiku = function(structure){
     }
 
     // FORMAT HAIKU
-    haiku = haiku.toLowerCase()
-		.split("\n")
-		.map(function(elem){return elem.slice(0, 1).toUpperCase() + elem.slice(1);})
-		.join("\n");
+    haiku = formatter.capitalize(haiku);
 
 	console.log(haiku);
 };
